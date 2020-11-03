@@ -90,8 +90,10 @@ def stone_onMouseAction(x, y):
 
         if not setPossible():
             showMessage("게임이 종료되었습니다.")
-
+    
     score()
+    computer()
+    
 
 
 
@@ -194,6 +196,59 @@ def reverse_xy(x, y):
     reverse_xy_dir(x, y, -1, 0)
     reverse_xy_dir(x, y, -1, 1)
     return False
+
+
+def count_xy_dir(x, y, dx, dy):
+    count = 0
+    if turn == Turn.BLACK:
+        mine = State.BLACK
+        other = State.WHITE
+    
+    else:
+        mine = State.WHITE
+        other = State.BLACK
+
+    while True:
+        x = x + dx
+        y = y + dy
+
+        if x < 0 or x > 7: return 0
+        if y < 0 or y > 7: return 0
+
+        object = stone[y][x]
+        if object.state == other:
+            count = count + 1
+        elif object.state == mine:
+            return count
+        else:
+            return 0
+
+def count_xy(x, y):
+    return 1 + count_xy_dir(x, y, 0, 1) 
+    + count_xy_dir(x, y, 1, 1)
+    + count_xy_dir(x, y, 1, 0)
+    + count_xy_dir(x, y, 1, -1)
+    + count_xy_dir(x, y, 0, -1)
+    + count_xy_dir(x, y, -1, -1)
+    + count_xy_dir(x, y, -1, 0)
+    + count_xy_dir(x, y, -1, 1)
+
+
+def computer():
+    max = 0
+    if turn == Turn.WHITE:
+        for y in range(8):
+            for x in range(8):
+                if stone[y][x].state == State.POSSIBLE:
+                    count = count_xy(x, y)
+                    if count > max:
+                        max = count
+                        Mx = x
+                        My = y
+
+    stone_onMouseAction(Mx, My)
+
+                    
 
 
 for y in range(8):
