@@ -20,6 +20,37 @@ class Turn(Enum):
 stone = []
 turn = Turn.BLACK
 
+Num1 = Object('Images/L0.png')
+Num1.locate(Main, 755, 220)
+Num1.show()
+
+Num2 = Object('Images/L2.png')
+Num2.locate(Main, 825, 220)
+Num2.show()
+
+Num3 = Object('Images/L0.png')
+Num3.locate(Main, 1075, 220)
+Num3.show()
+
+Num4 = Object('Images/L2.png')
+Num4.locate(Main, 1145, 220)
+Num4.show()
+
+def score():
+    blackStone = 0
+    whiteStone = 0
+
+    for y in range(8):
+        for x in range(8):
+            if stone[y][x].state == State.BLACK:
+                blackStone += 1
+            elif stone[y][x].state == State.WHITE:
+                whiteStone += 1
+    Num1.setImage('Images/L' +str(blackStone//10)+ '.png')
+    Num2.setImage('Images/L' +str(blackStone%10)+ '.png')
+    Num3.setImage('Images/L' +str(whiteStone//10)+ '.png')       
+    Num4.setImage('Images/L' +str(whiteStone%10)+ '.png')
+    
 def setState(x, y, state):
     object = stone[y][x]
     object.state = state
@@ -59,6 +90,9 @@ def stone_onMouseAction(x, y):
 
         if not setPossible():
             showMessage("게임이 종료되었습니다.")
+
+    score()
+
 
 
 def setPossible_xy_dir(x, y, dx, dy):
@@ -181,6 +215,5 @@ setState(3, 3, State.BLACK)
 setState(3, 4, State.WHITE)
 setState(4, 3, State.WHITE)
 setState(4, 4, State.BLACK)
-
 
 startGame(Main)
